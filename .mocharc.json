@@ -1,0 +1,4 @@
+{
+    "reqursive": true,
+    "require": "./test/test.config.js"
+}
