@@ -1,0 +1,9 @@
+POST  http://localhost:3000/api/auth/welcome
+Content-Type: application/json
+
+{
+    "name": "admin",
+    "hashPassword": "adminpassword",
+    "email": "admin@mail.ru",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQG1haWwucnUifQ.DimA9et-Ig-R2w_w72jgSCkTJMMASL3lwK4qLgYKYQ4"
+}
