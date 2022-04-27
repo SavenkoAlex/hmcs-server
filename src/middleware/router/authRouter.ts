@@ -1,6 +1,5 @@
 import Router from '@koa/router'
 import { register, authorize} from '../../controllers/authController'
-import { verifyToken } from '../auth'
 
 const authRouter = new Router({ prefix: '/auth' })
 

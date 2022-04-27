@@ -1,7 +1,7 @@
 import Koa from 'koa'
 import rout from './middleware/router'
 import dbConnect from './db'
-
+import { client } from './mqtt'
 const app = new Koa()
 
 dbConnect()
@@ -21,7 +21,11 @@ app.use(async (ctx, next) => {
     }
 })
 
+
 rout(app)
+client.on('packetsend', (e) => {
+    console.log('packagesend ', e)
+})
 
 app.listen(3000, () => {
     console.log('Server started on port 3000')

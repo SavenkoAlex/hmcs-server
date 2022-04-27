@@ -1,6 +1,5 @@
 import Router from '@koa/router'
 import { authRouter } from './authRouter'
-import { verifyToken } from '../auth'
 
 const nestedRouters = [
     authRouter
