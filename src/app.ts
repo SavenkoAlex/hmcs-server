@@ -21,8 +21,10 @@ app.use(async (ctx, next) => {
     }
 })
 
+app.context.mqttClient = client
 
 rout(app)
+
 client.on('packetsend', (e) => {
     console.log('packagesend ', e)
 })

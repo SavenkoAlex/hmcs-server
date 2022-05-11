@@ -1,3 +1,4 @@
+import { EventEmitter } from 'koa'
 import { IClientPublishOptions, MqttClient, PacketCallback } from 'mqtt'
 
 type Topic <S extends number, L extends string> = 
@@ -39,20 +40,27 @@ interface IController {
   publishMessage: <T> (message: Imessage <T>, opts: IClientPublishOptions, cb: PacketCallback) => void
 }
 
-class RemoteController implements IController {
+class RemoteController extends EventEmitter implements IController  {
   private client: MqttClient
   clientId: string
   device: IDevice | null
   presentation: IDevicePresentationModel | null
 
   constructor (client: MqttClient, clientId: string) {
+    super()
     this.client = client
     this.clientId = clientId
     this.device = null
     this.presentation = null
+  
+    this.client.on('message', data => {
+      this.emit('message', data)
+    })
+    
     this.client.subscribe(`${this.clientId}`)
   }
 
+  
   getDeviceStatus (force = false): Promise <IDevice | undefined > {
     return new Promise((resolve, reject) => {
       if (this.device && !force) {
