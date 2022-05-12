@@ -1,7 +1,7 @@
 import { 
   Model, 
-  Types,
-  Schema
+  Schema,
+  model
 } from 'mongoose'
 
 interface IDevice {
@@ -77,11 +77,10 @@ const devicePresentationSchema = new Schema <IDevicePresentation <IDevice>, Devi
   location: deviceLocationSchema
 })
 
+const devicePresentationModel = model <IDevicePresentation <IDevice>> ('DevicePresentationModel', devicePresentationSchema)
+
 export {
-  deviceSchema,
-  deviceDescriptionSchema,
-  deviceLocationSchema,
-  devicePresentationSchema,
+  devicePresentationModel,
   IDevice,
   IDeviceDescription,
   IDevicePresentation,

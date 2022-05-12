@@ -128,7 +128,11 @@ export class Esp8266Device extends EventEmitter implements IEsp8266Device {
   }
 }
 
-
+/**
+ * @description sends the broadcast message to request all device information
+ * @param client {MqttClient}
+ * @returns {Promise MIDevice[]}
+ */
 export function requestEsp8266Devices (client: MqttClient): Promise <IDevice[]> {
   const devices: IDevice[] = []
   
@@ -145,7 +149,7 @@ export function requestEsp8266Devices (client: MqttClient): Promise <IDevice[]> 
         devices.push(value)
       }
     })
-    setTimeout(() => devices.length ? resolve(devices) : reject('no devices were detected'), 30000)
+    setTimeout(() => devices.length ? resolve(devices) : reject('no devices were detected'), 20000)
     client.publish('system', '')
   })
 }

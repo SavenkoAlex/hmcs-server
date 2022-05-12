@@ -1,7 +1,7 @@
 import Koa from 'koa'
 import rout from './middleware/router'
 import dbConnect from './db'
-import { client } from './mqtt'
+import { client } from './services/mqtt'
 const app = new Koa()
 
 dbConnect()
