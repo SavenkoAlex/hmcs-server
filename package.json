@@ -7,7 +7,9 @@
     "start": "node ./dist/app.js",
     "compile": "tsc -p .",
     "eslint": "eslint --cache --ext .js,.jsx,.ts,.tsx src",
-    "test": "mocha"
+    "test": "mocha",
+    "migrate:up": "migrate-mongo up",
+    "migrate:down": "migrate-mongo down"
   },
   "author": "Savenko Aleksandr",
   "license": "ISC",
