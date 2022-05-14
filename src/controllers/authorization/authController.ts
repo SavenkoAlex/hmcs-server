@@ -1,6 +1,6 @@
 import koa from 'koa'
-import { User, TUser } from '../db/models/userModel'
-import { login } from '../services/authorization'
+import { User, TUser } from '../../db/models/userModel'
+import { login } from '../../services/autorization/authorization'
 
 async function authorize (ctx: koa.Context, next: koa.Next): Promise <void> {
     const { email, hashPassword: password } = <TUser> ctx.request.body

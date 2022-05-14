@@ -1,6 +1,6 @@
 import config from '../../config/config'
 import * as mqtt from 'mqtt'
-import { requestEsp8266Devices } from '../deviceInteraction/deviceClass'
+import { requestEsp8266Devices } from '../devices/deviceClass'
 const host = config.mqttHost
 const port = config.mqttPort
 

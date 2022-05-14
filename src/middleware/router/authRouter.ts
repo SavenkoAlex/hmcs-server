@@ -1,5 +1,5 @@
 import Router from '@koa/router'
-import { register, authorize} from '../../controllers/authController'
+import { register, authorize} from '../../controllers/authorization/authController'
 
 const authRouter = new Router({ prefix: '/auth' })
 

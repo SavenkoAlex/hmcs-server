@@ -1,4 +1,4 @@
-import { User } from '../db/models/userModel'
+import { User } from '../../db/models/userModel'
 import { sign } from 'jsonwebtoken'
 
 export async function login (login: string, password: string): Promise <{user: User, token: string} | undefined> {

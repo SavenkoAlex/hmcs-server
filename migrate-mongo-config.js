@@ -14,7 +14,7 @@ if (envFound.error) {
 const config = {
   mongodb: {
     // TODO Change (or review) the url to your MongoDB:
-    url: `${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`,
+    url: `${process.env.MONGODB_HOST}:${process.env.MONGO_PORT}`,
 
     // TODO Change this to your database name:
     databaseName: process.env.MONGO_COLLECTION,
@@ -43,6 +43,5 @@ const config = {
   // Don't change this, unless you know what you're doing
   moduleSystem: 'commonjs',
 }
-
 module.exports = config;
 

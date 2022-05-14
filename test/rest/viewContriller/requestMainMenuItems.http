@@ -1,0 +1,2 @@
+GET http://localhost:3000/api/view/menu/all
+Content-Type: application/json

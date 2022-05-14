@@ -6,12 +6,15 @@ import {
 interface IMenuItem {
   label: string,
   path: string,
-  icon: string,
-  authNeeded: boolean
+  icon: string | null,
 }
 
 interface INestedMenuItem extends IMenuItem {
   children: IMenuItem[] | null
+}
+
+interface IMenu <T extends IMenuItem> {
+  menuItems: [T]
 }
 
 const menuItemSchema = new Schema <INestedMenuItem> ({
@@ -24,28 +27,25 @@ const menuItemSchema = new Schema <INestedMenuItem> ({
     match: /^\/(.*\/?)/
   },
   icon: String,
-  authNeeded: {
-    type: Boolean,
-    default: false
-  }
 })
 
 menuItemSchema.add({children: [menuItemSchema]})
 
-const mainMenuSchema = new Schema <INestedMenuItem[]> ({
+const mainMenuSchema = new Schema <IMenu <INestedMenuItem>> ({
   menuItems: [menuItemSchema]
 })
 
-const quickMenuSchema = new Schema <IMenuItem[]> ({
+const quickMenuSchema = new Schema <IMenu<IMenuItem>> ({
   menuItems: [menuItemSchema]
 })
 
-const mainMenuModel = model <INestedMenuItem[]> ('mainMenu', mainMenuSchema)
-const quickMenuModel = model <IMenuItem[]> ('quickMenu', quickMenuSchema)
+const mainMenuModel = model <IMenu <INestedMenuItem>> ('mainMenu', mainMenuSchema)
+const quickMenuModel = model <IMenu <IMenuItem>> ('quickMenu', quickMenuSchema)
 
 export {
   mainMenuModel,
   quickMenuModel,
   IMenuItem,
   INestedMenuItem,
+  IMenu
 }

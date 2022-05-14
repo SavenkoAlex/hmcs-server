@@ -1,7 +1,7 @@
 import Router from '@koa/router'
 import {
   requestAvailableDevices
-} from '../../controllers/device/detectDevices'
+} from '../../controllers/devices/detectDevicesController'
 
 const deviceRouter = new Router({ prefix: '/device' })
 
