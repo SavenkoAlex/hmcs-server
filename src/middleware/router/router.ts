@@ -1,8 +1,10 @@
 import Router from '@koa/router'
 import { authRouter } from './authRouter'
+import { testRouter } from './deviceTestRouter'
 
 const nestedRouters = [
-    authRouter
+    authRouter,
+    testRouter
 ]
 
 const apiRouter = new Router({ prefix: '/api' })

@@ -1,7 +1,9 @@
 import Koa from 'koa'
 import rout from './middleware/router'
 import dbConnect from './db'
-import { client } from './mqtt'
+import { MqttBroker } from './modules/mqtt'
+import bodyParser from 'koa-bodyparser'
+
 const app = new Koa()
 
 dbConnect()
@@ -21,11 +23,16 @@ app.use(async (ctx, next) => {
     }
 })
 
+app.use(bodyParser())
 
 rout(app)
-client.on('packetsend', (e) => {
-    console.log('packagesend ', e)
-})
+
+MqttBroker.getInstance()
+    .connect()
+    .then(() => console.info('mqtt connected'))
+    .catch(err => {
+        console.error(err)
+    });
 
 app.listen(3000, () => {
     console.log('Server started on port 3000')
