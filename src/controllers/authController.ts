@@ -5,10 +5,14 @@ import { login } from '../services/authorization'
 async function authorize (ctx: koa.Context, next: koa.Next): Promise <void> {
     const { email, hashPassword: password } = <TUser> ctx.request.body
 
-    const loginResult = await login (email, password)
+    const { user = null, token = null } = await login (email, password)
     
-    if (loginResult) {
-        ctx.body = { ...loginResult.user, ...{ token: loginResult.token } }
+    if (user && token ) {
+        ctx.body = { ...user, ...{ token } }
+        ctx.cookies.set('access_token', token, {
+            httpOnly: true,
+            sameSite: 'strict'
+        })
         ctx.status = 200
         return
     }

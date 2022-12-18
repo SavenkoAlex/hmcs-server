@@ -3,8 +3,11 @@ import rout from './middleware/router'
 import dbConnect from './db'
 import { MqttBroker } from './modules/mqtt'
 import bodyParser from 'koa-bodyparser'
+import jwt from 'koa-jwt'
+import koaBody from 'koa-body'
 
 const app = new Koa()
+app.use(koaBody({ multipart: true }))
 
 dbConnect()
     .then(conn => {
@@ -23,7 +26,14 @@ app.use(async (ctx, next) => {
     }
 })
 
-app.use(bodyParser())
+
+
+app.use(jwt({
+    secret: process.env.TOKEN_KEY || '',
+    passthrough: true
+}).unless({
+    path: [/^\/api\/auth\/(login|register)/,]
+}))
 
 rout(app)
 

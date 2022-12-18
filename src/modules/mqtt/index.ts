@@ -1,6 +1,7 @@
 import { config } from '../../config'
 import { Broker } from '../broker'
 import * as mqtt from 'mqtt'
+import { CloseCallback, MqttClient } from 'mqtt'
 
 const host = config.mqttHost
 const port = config.mqttPort
@@ -11,13 +12,19 @@ interface IMqttBroker {
     topic: MqttTopic, 
     opt: mqtt.IClientOptions,
     payload?: MqttMessagePayLoad
-  }) => Promise <Error | mqtt.Packet | void>
+  }) => Promise <Error | Published >
 }
+
+type Published = {
+  on: (fn: (topic: MqttTopic, message: Buffer | string) => void) => void
+  disp: (cb: CloseCallback) => void
+}
+
 
 export class MqttBroker extends Broker <mqtt.Client> implements IMqttBroker {
 
   protected publicationOptions: mqtt.IClientPublishOptions
-  private static instance: Broker <mqtt.Client>
+  private static instance: MqttBroker
 
   private constructor() {
     super()
@@ -31,7 +38,7 @@ export class MqttBroker extends Broker <mqtt.Client> implements IMqttBroker {
     if (this.instance) {
       return this.instance
     }
-    this.instance = new MqttBroker()
+    this.instance = new MqttBroker ()
     return this.instance
   }
 
@@ -55,7 +62,7 @@ export class MqttBroker extends Broker <mqtt.Client> implements IMqttBroker {
     if (NOT_CONNECTED in this.client) {
       new Error('client is not connected try to exec connect method')
     }
-
+    //TODO: rewrite in Promise
     (this.client as mqtt.Client).subscribe(topic, err => {
       if (err) {
         console.error(err)
@@ -67,7 +74,7 @@ export class MqttBroker extends Broker <mqtt.Client> implements IMqttBroker {
     topic: MqttTopic, 
     options?: mqtt.IClientPublishOptions,
     payloadObject?: MqttMessagePayLoad
-  }): Promise <Error | void> {
+  }): Promise <Error | Published> {
    
     const {
       topic,
@@ -78,6 +85,7 @@ export class MqttBroker extends Broker <mqtt.Client> implements IMqttBroker {
     const payload = payloadObject 
     ? payloadObject.isBuffer 
       ? payloadObject.value as Buffer 
+      //TODO: ? value
       : JSON.stringify(payloadObject)
     : ''
 
@@ -92,7 +100,12 @@ export class MqttBroker extends Broker <mqtt.Client> implements IMqttBroker {
           if (error) {
             reject(error)
           }
-          resolve()
+          resolve({
+            on: (fn: (topic: MqttTopic, message: string | Buffer) => void) => {
+              (this.client as mqtt.Client).on('message', fn)
+            },
+            disp: (fn: CloseCallback) => (this.client as mqtt.Client).end(true, {}, fn)
+          })
         })
     })
   }

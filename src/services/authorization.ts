@@ -1,7 +1,7 @@
 import { User } from '../db/models/userModel'
 import { sign } from 'jsonwebtoken'
 
-export async function login (login: string, password: string): Promise <{user: User, token: string} | undefined> {
+export async function login (login: string, password: string): Promise <{user: User | false, token: string | null} > {
     const user = await User.login(login, password)
     if (user) {
         const token = sign({
@@ -13,6 +13,9 @@ export async function login (login: string, password: string): Promise <{user: U
 
         return { user, token }
     }
-    return
+    return {
+        user,
+        token: null
+    }
 }
 

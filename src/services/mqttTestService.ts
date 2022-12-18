@@ -10,13 +10,32 @@ enum LampState {
 
 const topic = 'test/espruino'
 
-export function getDeviceSysInfos () {
+export async function getDeviceSysInfos () {
   (broker as MqttBroker).subscribe('_devices/system');
 
-  (broker as MqttBroker).publish({
+  const listener = await (broker as MqttBroker).publish({
     topic: 'system'
-  });
+  })
 
+  if (listener instanceof Error) {
+    return
+  }
+
+  return new Promise((resolve, reject) => {
+    listener.on((topic: MqttTopic, message: string | Buffer) => {
+      if (topic) {
+        console.log(topic)
+      }
+      console.log(message.toString())
+      listener.disp((err) => {
+        if (err) {
+          console.error(err)
+          reject(err)
+        }
+      })
+      void resolve(message)
+    })
+  })
 }
 
 export function turnOffLamp () {
