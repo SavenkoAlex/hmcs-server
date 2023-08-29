@@ -34,7 +34,7 @@ export const config = {
             ping_timeout: 30
         },
         http: {
-            port: 8888,
+            port: 8887,
             mediaroot: './server/media',
             allow_origin: '*'
         },
@@ -43,6 +43,7 @@ export const config = {
             tasks: [{
                 app: 'live',
                 hls: true,
+                vc: 'libx264',
                 hlsFlags: '[hls_time=2:hls_list_size=3:hls_flags=delete_segments]',
                 hlsKeep: true,
                 dash: true,
