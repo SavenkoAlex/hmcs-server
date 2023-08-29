@@ -5,6 +5,7 @@ import { MqttBroker } from './modules/mqtt'
 import bodyParser from 'koa-bodyparser'
 import jwt from 'koa-jwt'
 import koaBody from 'koa-body'
+import { nms } from './services/media_server'
 
 const app = new Koa()
 app.use(koaBody({ multipart: true }))
@@ -15,14 +16,14 @@ dbConnect()
     })
     .catch(err => {
         console.error('Database connection error: ', err.message)
-        process.exit(1)
+        //process.exit(1)
     })
 
 app.use(async (ctx, next) => {
     try {
         await next()
-    } catch ({ message }) {
-        ctx.throw(message as string, 500)
+    } catch (err) {
+        ctx.throw(JSON.stringify(err), 500)
     }
 })
 
@@ -43,6 +44,8 @@ MqttBroker.getInstance()
     .catch(err => {
         console.error(err)
     });
+
+nms.run()
 
 app.listen(3000, () => {
     console.log('Server started on port 3000')
